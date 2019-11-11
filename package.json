@@ -1,0 +1,39 @@
+{
+  "name": "library-api",
+  "version": "1.0.0",
+  "description": "Library API created by using koa and mysql",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "NODE_ENV=production APP_PORT=3000 node src/index.js",
+    "test": "NODE_ENV=test APP_PORT=3000 mocha --exit --recursive --timeout 10000 tests/*",
+    "eslint": "eslint ./",
+    "eslint:fix": "eslint ./ --fix",
+    "coverage": "NODE_ENV=test APP_PORT=3000 nyc --reporter=text --reporter=html --check-coverage --lines 80 mocha --exit --recursive --timeout 10000 tests/*",
+    "init-db": "node initialize-database.js",
+    "init-db:fill": "node initialize-database.js --fill"
+  },
+  "author": "Nikita Eliseev",
+  "license": "MIT",
+  "dependencies": {
+    "bluebird": "^3.7.1",
+    "is-uuid": "^1.0.2",
+    "koa": "^2.11.0",
+    "koa-bodyparser": "^4.2.1",
+    "koa-router": "^7.4.0",
+    "moment": "^2.24.0",
+    "mysql": "^2.17.1",
+    "shuffle-array": "^1.0.1",
+    "uuid": "^3.3.3",
+    "validate.js": "^0.13.1"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "eslint": "^6.6.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.2",
+    "nyc": "^14.1.1",
+    "randomstring": "^1.1.5"
+  }
+}
