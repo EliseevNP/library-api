@@ -9,7 +9,7 @@
  * @apiUse BookDateParam
  * @apiUse BookDescriptionParam
  * @apiUse BookImageParam
- * @apiUse OptionalBookAuthorsParam
+ * @apiUse BookAuthorsParam
  *
  * @apiSuccessExample {json} 200:
  *   HTTP/1.1 200 OK
@@ -37,7 +37,7 @@
  * @apiUse BookDateParam
  * @apiUse BookDescriptionParam
  * @apiUse BookImageParam
- * @apiUse OptionalBookAuthorsParam
+ * @apiUse BookAuthorsParam
  *
  * @apiSuccessExample {json} 200:
  *   HTTP/1.1 200 OK
@@ -65,6 +65,20 @@
  * @apiUse BookLimitParam
  * @apiUse BookSortParam
  * @apiUse BookWhereParam
+ * @apiUse BookWhereOrParam
+ * @apiUse BookWhereAndParam
+ * @apiUse BookWhereTitleParam
+ * @apiUse BookWhereTitleOperatorParam
+ * @apiUse BookWhereTitleValueParam
+ * @apiUse BookWhereDateParam
+ * @apiUse BookWhereDateOperatorParam
+ * @apiUse BookWhereDateValueParam
+ * @apiUse BookWhereDescriptionParam
+ * @apiUse BookWhereDescriptionOperatorParam
+ * @apiUse BookWhereDescriptionValueParam
+ * @apiUse BookWhereImageParam
+ * @apiUse BookWhereImageOperatorParam
+ * @apiUse BookWhereImageValueParam
  *
  * @apiExample {js} Пример запроса с помощью axios:
  * const axios = require('axios');

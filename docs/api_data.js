@@ -29,9 +29,9 @@ define({ "api": [
     "groupTitle": "Books",
     "parameter": {
       "fields": {
-        "Parameter": [
+        "Параметры (источник: body)": [
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "size": "..255",
             "optional": false,
@@ -39,14 +39,14 @@ define({ "api": [
             "description": "<p>Название книги</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "optional": false,
             "field": "date",
             "description": "<p>Дата публикации книги (допустимый формат даты: 'YYYY-MM-DD')</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "size": "..65535",
             "optional": false,
@@ -54,7 +54,7 @@ define({ "api": [
             "description": "<p>Описание книги</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "size": "..255",
             "optional": false,
@@ -62,7 +62,7 @@ define({ "api": [
             "description": "<p>Обложка книги (URL)</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string[]",
             "optional": true,
             "field": "authors",
@@ -100,9 +100,9 @@ define({ "api": [
     "groupTitle": "Books",
     "parameter": {
       "fields": {
-        "Parameter": [
+        "Параметры (источник: querystring)": [
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: querystring)",
             "type": "Number",
             "size": "0..",
             "optional": true,
@@ -111,7 +111,7 @@ define({ "api": [
             "description": "<p>Число, указывающее позицию, начиная с которой будет осуществляться выборка из базы данных</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: querystring)",
             "type": "Number",
             "size": "0..100",
             "optional": true,
@@ -120,7 +120,7 @@ define({ "api": [
             "description": "<p>Максимальное количество книг, которые будут возвращены после обработки запроса</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: querystring)",
             "type": "string[]",
             "allowedValues": [
               "'title'",
@@ -143,11 +143,159 @@ define({ "api": [
             "description": "<p>Поля, по которым необходимо отсортировать книги</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: querystring)",
             "type": "object",
+            "size": "1",
             "optional": true,
             "field": "where",
-            "description": "<p>Условия фильтрации книг (подробнее о параметре смотри в примере запроса)</p>"
+            "description": "<p>Условия фильтрации книг (объект должен содержать только один ключ)</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object[]",
+            "size": "2..",
+            "optional": true,
+            "field": "where.OR",
+            "description": "<p>Логический оператор OR (массив объектов, аналогичных объекту where)</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object[]",
+            "size": "2..",
+            "optional": true,
+            "field": "where.AND",
+            "description": "<p>Логический оператор AND (массив объектов, аналогичных объекту where)</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.title",
+            "description": "<p>Объект, содержащий информацию для сравнения с полем title</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.title.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "size": "..255",
+            "optional": true,
+            "field": "where.title.value",
+            "description": "<p>Значение для сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.date",
+            "description": "<p>Объект, содержащий информацию для сравнения с полем date</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.date.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "optional": true,
+            "field": "where.date.value",
+            "description": "<p>Значение для сравнения (допустимый формат даты: 'YYYY-MM-DD')</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.description",
+            "description": "<p>Объект, содержащий информацию для сравнения с полем description</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.description.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "size": "..65535",
+            "optional": true,
+            "field": "where.description.value",
+            "description": "<p>Значение для сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.image",
+            "description": "<p>Объект, содержащий информацию для сравнения с полем image</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.timage.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "size": "..255",
+            "optional": true,
+            "field": "where.image.value",
+            "description": "<p>Значение для сравнения (URL)</p>"
           }
         ]
       }
@@ -183,16 +331,18 @@ define({ "api": [
     "groupTitle": "Books",
     "parameter": {
       "fields": {
-        "Parameter": [
+        "Параметры (источник: url)": [
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: url)",
             "type": "string",
             "optional": false,
             "field": "id",
             "description": "<p>Идентификатор книги (допустимый формат идентификатора: uuid)</p>"
-          },
+          }
+        ],
+        "Параметры (источник: body)": [
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "size": "..255",
             "optional": false,
@@ -200,14 +350,14 @@ define({ "api": [
             "description": "<p>Название книги</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "optional": false,
             "field": "date",
             "description": "<p>Дата публикации книги (допустимый формат даты: 'YYYY-MM-DD')</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "size": "..65535",
             "optional": false,
@@ -215,7 +365,7 @@ define({ "api": [
             "description": "<p>Описание книги</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string",
             "size": "..255",
             "optional": false,
@@ -223,7 +373,7 @@ define({ "api": [
             "description": "<p>Обложка книги (URL)</p>"
           },
           {
-            "group": "Parameter",
+            "group": "Параметры (источник: body)",
             "type": "string[]",
             "optional": true,
             "field": "authors",

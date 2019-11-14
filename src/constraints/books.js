@@ -101,7 +101,7 @@ module.exports.getBooks = {
   },
   where: {
     validateWhere: {
-      fieldsConstraints: bookFields,
+      fieldsConstraints: { ...bookFields, authors: undefined },
     },
   },
 };
