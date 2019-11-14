@@ -67,9 +67,25 @@ $ docker-compose up -d
 
 > The database will be filled with random values. The number of records added to the database depends on the BOOKS_COUNT and AUTHORS_COUNT enviroment variables and can be changed from 'docker-compose.yaml' file
 
-## Docs
+## Documentation
 
-Docs available [here](https://eliseevnp.github.io/library-api/).
+Documentation available [here](https://eliseevnp.github.io/library-api/).
+
+## Tests
+
+To run tests use:
+
+```sh
+$ npm run test
+```
+
+To check code coverage use:
+
+```sh
+$ npm run coverage
+```
+
+Now you can open './coverage/index.html' file in your browser to see the code coverage report.
 
 ## License
 
