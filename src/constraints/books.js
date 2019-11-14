@@ -1,5 +1,5 @@
 const isUUID = require('is-uuid');
-const { getFiltersObject } = require('../helpers');
+const validate = require('validate.js');
 
 const bookFields = {
   title: {
@@ -58,6 +58,7 @@ module.exports.updateBooks = {
     presence: true,
     type: 'string',
     validateField: {
+      type: 'string',
       validator: field => { return isUUID.v1(field); },
       message: 'must have uuid format',
     },
@@ -69,8 +70,9 @@ module.exports.getBooks = {
   offset: {
     numericality: {
       onlyInteger: true,
-      greaterThan: 0,
+      greaterThanOrEqualTo: 0,
     },
+    default: 0,
   },
   limit: {
     numericality: {
@@ -78,6 +80,7 @@ module.exports.getBooks = {
       greaterThan: 0,
       lessThanOrEqualTo: 100,
     },
+    default: 20,
   },
   sort: {
     type: 'array',
@@ -89,6 +92,29 @@ module.exports.getBooks = {
       validator: item => { return sortInclusion.includes(item); },
       message: `must contain only permitted items, such as: [${sortInclusion.join(', ')}]`,
     },
+    duplicates: {
+      allow: false,
+    },
+    transform: () => {
+      return (value => {
+        return validate.isString(value)
+          ? [value]
+          : value;
+      });
+    },
   },
-  ...getFiltersObject(bookFields),
+  where: {
+    validateWhere: {
+      fieldsConstraints: bookFields,
+    },
+    transform: () => {
+      return (value => {
+        try {
+          return JSON.parse(value);
+        } catch (err) {
+          return value;
+        }
+      });
+    },
+  },
 };

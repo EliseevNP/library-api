@@ -3,7 +3,7 @@ const chaiHttp = require('chai-http');
 const isUUID = require('is-uuid');
 const uuidv1 = require('uuid/v1');
 const app = require('../../src');
-const db = require('../../src/db');
+const pool = require('../../src/db');
 const { cleanup, insertAuthors, getBooksWithAuthors } = require('../utils/helpers');
 const { BOOKS, AUTHORS } = require('../utils/assets');
 
@@ -20,7 +20,7 @@ describe('POST /books', () => {
       .post('/books')
       .send({ authors: [uuidv1()], ...BOOKS[0] });
 
-    const { booksCount } = (await db.queryAsync('SELECT COUNT(*) AS booksCount FROM books;'))[0];
+    const { booksCount } = (await pool.queryAsync('SELECT COUNT(*) AS booksCount FROM books;'))[0];
 
     expect(status).to.be.equal(400);
     expect(booksCount).to.be.equal(0);
@@ -37,7 +37,7 @@ describe('POST /books', () => {
     const books = (await getBooksWithAuthors());
 
     expect(status).to.be.equal(200);
-    expect(isUUID.v1(body.id)).to.be.true; // eslint-disable-line no-unused-expressions
+    expect(isUUID.v1(body.id)).to.be.true;
     expect(books[0]).to.be.deep.equal({
       authors: [AUTHORS[0].id],
       ...BOOKS[0],

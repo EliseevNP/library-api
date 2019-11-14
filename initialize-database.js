@@ -1,13 +1,16 @@
 /* eslint-disable no-console */
+/* eslint-disable no-await-in-loop  */
 
 const Promise = require('bluebird');
 const moment = require('moment');
 const uuidv1 = require('uuid/v1');
 const shuffle = require('shuffle-array');
-const db = require('./src/db');
+const pool = require('./src/db');
 
-const BOOKS_COUNT = 100000;
-const AUTHORS_COUNT = 100;
+const BOOKS_COUNT = 20000;
+const AUTHORS_COUNT = 500;
+const MAX_COAUTHORS_COUNT = 3;
+const INSERTION_STEP = 50000;
 
 const random = (min = 0, max = 100) => {
   return Math.floor(min + Math.random() * (max + 1 - min));
@@ -15,7 +18,7 @@ const random = (min = 0, max = 100) => {
 
 async function main() {
   try {
-    const connection = Promise.promisifyAll(await db.getConnectionAsync());
+    const connection = Promise.promisifyAll(await pool.getConnectionAsync());
 
     console.log('[INIT_DATABASE] Reinitialize tables structure');
 
@@ -66,9 +69,9 @@ async function main() {
         'https://images.wallpaperscraft.com/image/mountains_dark_night_150783_3840x2160.jpg',
       ];
 
-      let books = [];
-      let authors = [];
-      let booksAuthors = [];
+      const books = [];
+      const authors = [];
+      const booksAuthors = [];
       const booksIds = [];
       const authorsIds = [];
 
@@ -81,8 +84,6 @@ async function main() {
         books.push(`(UUID_TO_BIN('${id}'), 'book_${i}', '${date}', 'book_description_${i}', '${images[random(0, 9)]}')`);
       }
 
-      books = books.join(',');
-
       // Prepare authors
       for (let i = 0; i < AUTHORS_COUNT; i++) {
         const id = uuidv1();
@@ -91,8 +92,6 @@ async function main() {
         authors.push(`(UUID_TO_BIN('${id}'), 'author_name_${i}', 'author_second_name_${i}', 'author_patronymic_${i}')`);
       }
 
-      authors = authors.join(',');
-
       // Prepare booksAuthors
       for (let i = 0; i < BOOKS_COUNT; i++) {
         const authorIdIndex = random(0, AUTHORS_COUNT - 1);
@@ -100,7 +99,7 @@ async function main() {
         booksAuthors.push(`(UUID_TO_BIN('${booksIds[i]}'), UUID_TO_BIN('${authorsIds[authorIdIndex]}'))`);
 
         // Each book can be written by the author together with the co-authors
-        const coAuthorsCount = random(0, 5);
+        const coAuthorsCount = random(0, MAX_COAUTHORS_COUNT);
 
         const coAuthorsIdsIndexes = [];
 
@@ -127,30 +126,59 @@ async function main() {
       // Mix data
       shuffle(booksAuthors);
 
-      booksAuthors = booksAuthors.join(',');
+      // Insert values
+      console.log(`[INIT_DATABASE]   books inserting (${books.length} records) ...`);
 
-      console.log('[INIT_DATABASE]   books inserting ...');
-      await connection.queryAsync(`
-        INSERT INTO books(id, title, date, description, image)
-        VALUES ${books};
-      `);
+      let totalBooks = 0;
 
-      console.log('[INIT_DATABASE]   authors inserting ...');
-      await connection.queryAsync(`
-        INSERT INTO authors(id, name, second_name, patronymic)
-        VALUES ${authors};
-      `);
+      for (let offset = 0; offset < books.length; offset += INSERTION_STEP) {
+        const values = books.slice(offset, offset + INSERTION_STEP);
 
-      console.log('[INIT_DATABASE]   books_authors inserting ...');
-      await connection.queryAsync(`
-        INSERT INTO books_authors(book_id, author_id)
-        values ${booksAuthors};
-      `);
+        await connection.queryAsync(`
+          INSERT INTO books(id, title, date, description, image)
+          VALUES ${values.join(',')};
+        `);
+
+        totalBooks += values.length;
+        console.log(`[INIT_DATABASE]     ${totalBooks} records was added`);
+      }
+
+      console.log(`[INIT_DATABASE]   authors inserting (${authors.length} records) ...`);
+
+      let totalAuthors = 0;
+
+      for (let offset = 0; offset < authors.length; offset += INSERTION_STEP) {
+        const values = authors.slice(offset, offset + INSERTION_STEP);
+
+        await connection.queryAsync(`
+          INSERT INTO authors(id, name, second_name, patronymic)
+          VALUES ${values.join(',')};
+        `);
+
+        totalAuthors += values.length;
+        console.log(`[INIT_DATABASE]     ${totalAuthors} records was added`);
+      }
+
+      console.log(`[INIT_DATABASE]   books_authors inserting (${booksAuthors.length} records) ...`);
+
+      let totalBooksAuthors = 0;
+
+      for (let offset = 0; offset < booksAuthors.length; offset += INSERTION_STEP) {
+        const values = booksAuthors.slice(offset, offset + INSERTION_STEP);
+
+        await connection.queryAsync(`
+          INSERT INTO books_authors(book_id, author_id)
+          values ${values.join(',')};
+        `);
+
+        totalBooksAuthors += values.length;
+        console.log(`[INIT_DATABASE]     ${totalBooksAuthors} records was added`);
+      }
     }
   } catch (err) {
     console.error(err);
   } finally {
-    db.end();
+    pool.end();
   }
 }
 

@@ -1,1 +1,4 @@
-module.exports.FILTER_OPERATORS = ['=', '!=', '>', '>=', '<', '<='];
+module.exports.WHERE_OPERATORS = {
+  COMPARISONS: ['=', '!=', '>', '>=', '<', '<=', '!<', '!>', '<>'],
+  LOGICALS: ['AND', 'OR'],
+};

@@ -1,7 +1,7 @@
 const chai = require('chai');
 const randomstring = require('randomstring');
 const { books } = require('../../../src/constraints');
-const { validate } = require('../../../src/helpers');
+const { validateExtension } = require('../../../src/helpers');
 
 const { expect } = chai;
 
@@ -9,13 +9,13 @@ describe('books constraints', () => {
   describe('createBooks', () => {
     it('blank parameters', () => {
       const expectedErrors = {
-        title: ['Title can\'t be blank'],
-        date: ['Date can\'t be blank'],
-        description: ['Description can\'t be blank'],
-        image: ['Image can\'t be blank'],
+        title: ['can\'t be blank'],
+        date: ['can\'t be blank'],
+        description: ['can\'t be blank'],
+        image: ['can\'t be blank'],
       };
 
-      expect(validate({}, books.createBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension({}, books.createBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('incorrect types', () => {
@@ -28,14 +28,14 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        title: ['Title must be of type string', 'Title has an incorrect length'],
-        date: ['Date must be of type string', 'Date must be a valid date'],
-        description: ['Description must be of type string', 'Description has an incorrect length'],
-        image: ['Image must be of type string', 'Image has an incorrect length'],
-        authors: ['Authors must be of type array', 'Authors has an incorrect length'],
+        title: ['must be of type string', 'has an incorrect length'],
+        date: ['must be of type string', 'must be a valid date'],
+        description: ['must be of type string', 'has an incorrect length'],
+        image: ['must be of type string', 'has an incorrect length'],
+        authors: ['must be of type array', 'has an incorrect length'],
       };
 
-      expect(validate(values, books.createBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.createBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('incorrect length', () => {
@@ -48,13 +48,13 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        title: ['Title is too long (maximum is 255 characters)'],
-        description: ['Description is too long (maximum is 65535 characters)'],
-        image: ['Image is too long (maximum is 255 characters)'],
-        authors: ['Authors must have at least one element'],
+        title: ['is too long (maximum is 255 characters)'],
+        description: ['is too long (maximum is 65535 characters)'],
+        image: ['is too long (maximum is 255 characters)'],
+        authors: ['must have at least one element'],
       };
 
-      expect(validate(values, books.createBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.createBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('incorrect date format', () => {
@@ -66,10 +66,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        date: ['Date must be a valid date'],
+        date: ['must be a valid date'],
       };
 
-      expect(validate(values, books.createBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.createBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('not uuid item in authors array', () => {
@@ -82,10 +82,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        authors: ['Authors must contain only uuid items'],
+        authors: ['must contain only uuid items'],
       };
 
-      expect(validate(values, books.createBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.createBooks)).to.be.deep.equal(expectedErrors);
     });
   });
 
@@ -99,10 +99,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        id: ['Id can\'t be blank'],
+        id: ['can\'t be blank'],
       };
 
-      expect(validate(values, books.updateBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.updateBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('incorrect types', () => {
@@ -115,10 +115,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        id: ['Id must be of type string'],
+        id: ['must be of type string'],
       };
 
-      expect(validate(values, books.updateBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.updateBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('id is not uuid', () => {
@@ -131,10 +131,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        id: ['Id must have uuid format'],
+        id: ['must have uuid format'],
       };
 
-      expect(validate(values, books.updateBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.updateBooks)).to.be.deep.equal(expectedErrors);
     });
   });
 
@@ -143,18 +143,16 @@ describe('books constraints', () => {
       const values = {
         offset: 'should be number',
         limit: 'should be number',
-        sort: 'should be array',
-        filter: 'should be object',
+        sort: { error: 'should be array' },
       };
 
       const expectedErrors = {
-        limit: ['Limit is not a number'],
-        offset: ['Offset is not a number'],
-        sort: ['Sort must be of type array'],
-        filter: ['Filter must be of type object'],
+        limit: ['is not a number'],
+        offset: ['is not a number'],
+        sort: ['must be of type array', 'has an incorrect length'],
       };
 
-      expect(validate(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('incorrect length', () => {
@@ -163,10 +161,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        sort: ['Sort must have at least one element'],
+        sort: ['must have at least one element'],
       };
 
-      expect(validate(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('not integer offset/limit', () => {
@@ -176,25 +174,25 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        limit: ['Limit must be an integer'],
-        offset: ['Offset must be an integer'],
+        limit: ['must be an integer'],
+        offset: ['must be an integer'],
       };
 
-      expect(validate(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('too small offset/limit', () => {
       const values = {
-        offset: 0,
+        offset: -1,
         limit: 0,
       };
 
       const expectedErrors = {
-        limit: ['Limit must be greater than 0'],
-        offset: ['Offset must be greater than 0'],
+        limit: ['must be greater than 0'],
+        offset: ['must be greater than or equal to 0'],
       };
 
-      expect(validate(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('too big limit', () => {
@@ -203,10 +201,10 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        limit: ['Limit must be less than or equal to 100'],
+        limit: ['must be less than or equal to 100'],
       };
 
-      expect(validate(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
     });
 
     it('unknown item in sort array', () => {
@@ -215,10 +213,178 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        sort: ['Sort must contain only permitted items, such as: [title, date, description, image, authors, title ASC, date ASC, description ASC, image ASC, authors ASC, title DESC, date DESC, description DESC, image DESC, authors DESC]'],
+        sort: ['must contain only permitted items, such as: [title, date, description, image, authors, title ASC, date ASC, description ASC, image ASC, authors ASC, title DESC, date DESC, description DESC, image DESC, authors DESC]'],
       };
 
-      expect(validate(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('duplicate items in sort array', () => {
+      const values = {
+        sort: ['title', 'title'],
+      };
+
+      const expectedErrors = {
+        sort: ['must not contain duplicates'],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('where is null', () => {
+      const values = {
+        where: null,
+      };
+
+      const expectedErrors = {
+        where: ['where must be of type object'],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('empty where', () => {
+      const values = {
+        where: {},
+      };
+
+      const expectedErrors = {
+        where: ['where object must have one key'],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('unknown key in where', () => {
+      const values = {
+        where: { unknownKey: 'error' },
+      };
+
+      const expectedErrors = {
+        where: ['where contain unknown key \'unknownKey\' (known keys: [AND,OR,title,date,description,image,authors])'],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('logical operator key in where is not an array', () => {
+      const values = {
+        where: { AND: { error: 'should be array' } },
+      };
+
+      const expectedErrors = {
+        where: ['where.AND must be of type array'],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('logical operator array contain less than 2 items', () => {
+      const values = {
+        where: { AND: [] },
+      };
+
+      const expectedErrors = {
+        where: ['where.AND array must contain at least 2 items'],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('incorrect field in where', () => {
+      const values = {
+        where: {
+          title: 'should be object',
+        },
+      };
+
+      const expectedErrors = {
+        where: [
+          'where.title: [must be of type object]',
+          'where.title.value: [can\'t be blank]',
+          'where.title.operator: [can\'t be blank]',
+        ],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('nested where validation', () => {
+      const values = {
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  title: {
+                    value: randomstring.generate(), // correct value
+                  },
+                },
+                {},
+              ],
+            },
+            {
+              OR: [],
+            },
+          ],
+        },
+      };
+
+      const expectedErrors = {
+        where: [
+          'where.AND[0].OR[0].title.operator: [can\'t be blank]',
+          'where.AND[0].OR[1] object must have one key',
+          'where.AND[1].OR array must contain at least 2 items',
+        ],
+      };
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
+    });
+
+    it('correct where example', () => {
+      // ((title >= 'book_5' AND title <= 'book_10') OR title > 'book_15') AND date > '2000-01-01'
+      const values = {
+        where: {
+          AND: [
+            {
+              OR: [
+                {
+                  title: {
+                    operator: '>',
+                    value: 'book_15',
+                  },
+                },
+                {
+                  AND: [
+                    {
+                      title: {
+                        operator: '>=',
+                        value: 'book_5',
+                      },
+                    },
+                    {
+                      title: {
+                        operator: '<=',
+                        value: 'book_10',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              date: {
+                operator: '>',
+                value: '2000-01-01',
+              },
+            },
+          ],
+        },
+      };
+
+      const expectedErrors = undefined;
+
+      expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);
     });
   });
 });

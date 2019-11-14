@@ -1,13 +1,12 @@
 const Promise = require('bluebird');
-const db = require('../db');
 
 /**
- * Perform all sql queries inside given callback as a transaction.
- * If callback throw an error, transaction changes will be rollbacked.
- * If callback return some result, transaction changes will be commited.
+ * This helper executes all SQL queries within a given callback as a transaction.
+ * If the callback throw an error, transaction changes will be rollbacked.
+ * If the callback return some result, transaction changes will be commited.
  */
-module.exports = async callback => {
-  const connection = await db.getConnectionAsync();
+module.exports = async (pool, callback) => {
+  const connection = await pool.getConnectionAsync();
 
   try {
     Promise.promisifyAll(connection);
