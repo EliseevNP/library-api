@@ -1,5 +1,6 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const qs = require('qs');
 const app = require('../../src');
 const { BOOKS, AUTHORS, BOOKS_AUTHORS } = require('../utils/assets');
 const {
@@ -25,28 +26,27 @@ describe('GET /books', () => {
 
   it('should get books', async () => {
     const { status, body } = await request(app)
-      .get('/books')
-      .query({
+      .get(`/books? + ${qs.stringify({
         offset: 0,
         limit: 3,
         sort: ['title DESC'],
-        where: {
+        where: { // WHERE title = 'book_3' OR description = 'book_description_2'
           OR: [
             {
               title: {
-                operator: '>=',
+                operator: '=',
                 value: 'book_3',
               },
             },
             {
               description: {
-                operator: '<=',
+                operator: '=',
                 value: 'book_description_2',
               },
             },
           ],
         },
-      });
+      })}`);
 
     const expectedBooks = [
       {
@@ -65,17 +65,6 @@ describe('GET /books', () => {
           },
           {
             ...AUTHORS[2],
-          },
-        ],
-      },
-      {
-        ...BOOKS[0],
-        authors: [
-          {
-            ...AUTHORS[0],
-          },
-          {
-            ...AUTHORS[1],
           },
         ],
       },

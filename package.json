@@ -8,7 +8,7 @@
     "test": "NODE_ENV=test APP_PORT=3001 mocha --exit --recursive --timeout 10000 tests/*",
     "eslint": "eslint ./",
     "eslint:fix": "eslint ./ --fix",
-    "coverage": "NODE_ENV=test APP_PORT=3000 nyc --reporter=text --reporter=html --check-coverage --lines 80 mocha --exit --recursive --timeout 10000 tests/*",
+    "coverage": "NODE_ENV=test APP_PORT=3001 nyc --reporter=text --reporter=html --check-coverage --lines 80 mocha --exit --recursive --timeout 10000 tests/*",
     "init-db": "node initialize-database.js",
     "init-db:fill": "node initialize-database.js --fill",
     "docs": "apidoc -i assets/apidoc/ -o docs/"
@@ -31,6 +31,7 @@
     "koa-router": "^7.4.0",
     "moment": "^2.24.0",
     "mysql": "^2.17.1",
+    "qs": "^6.9.1",
     "uuid": "^3.3.3",
     "validate.js": "^0.13.1"
   },
