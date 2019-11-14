@@ -32,10 +32,6 @@ const bookFields = {
   },
   authors: {
     type: 'array',
-    length: {
-      minimum: 1,
-      tooShort: 'must have at least one element',
-    },
     validateEachItem: {
       validator: item => { return isUUID.v1(item); },
       message: 'must contain only uuid items',
@@ -106,15 +102,6 @@ module.exports.getBooks = {
   where: {
     validateWhere: {
       fieldsConstraints: bookFields,
-    },
-    transform: () => {
-      return (value => {
-        try {
-          return JSON.parse(value);
-        } catch (err) {
-          return value;
-        }
-      });
     },
   },
 };

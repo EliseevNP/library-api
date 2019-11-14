@@ -32,7 +32,7 @@ describe('books constraints', () => {
         date: ['must be of type string', 'must be a valid date'],
         description: ['must be of type string', 'has an incorrect length'],
         image: ['must be of type string', 'has an incorrect length'],
-        authors: ['must be of type array', 'has an incorrect length'],
+        authors: ['must be of type array'],
       };
 
       expect(validateExtension(values, books.createBooks)).to.be.deep.equal(expectedErrors);
@@ -41,17 +41,16 @@ describe('books constraints', () => {
     it('incorrect length', () => {
       const values = {
         date: '2019-01-01', // correct value
+        authors: [], // correct value
         title: randomstring.generate(256),
         description: randomstring.generate(65536),
         image: randomstring.generate(256),
-        authors: [],
       };
 
       const expectedErrors = {
         title: ['is too long (maximum is 255 characters)'],
         description: ['is too long (maximum is 65535 characters)'],
         image: ['is too long (maximum is 255 characters)'],
-        authors: ['must have at least one element'],
       };
 
       expect(validateExtension(values, books.createBooks)).to.be.deep.equal(expectedErrors);

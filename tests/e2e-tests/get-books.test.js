@@ -30,7 +30,7 @@ describe('GET /books', () => {
         offset: 0,
         limit: 3,
         sort: ['title DESC'],
-        where: JSON.stringify({
+        where: {
           OR: [
             {
               title: {
@@ -45,7 +45,7 @@ describe('GET /books', () => {
               },
             },
           ],
-        }),
+        },
       });
 
     const expectedBooks = [

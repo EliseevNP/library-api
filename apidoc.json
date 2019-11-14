@@ -1,0 +1,5 @@
+ {
+  "name": "Library API",
+  "version": "0.0.1",
+  "description": "Library API created by using koa and mysql"
+}

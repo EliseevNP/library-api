@@ -70,6 +70,7 @@ describe('PATCH /books/:id', () => {
     })[0];
 
     expect(status).to.be.equal(200);
+    expect(body).to.be.deep.equal({ ok: true });
     expect(updatedBook.id).to.be.equal(BOOKS[0].id);
     expect(updatedBook).to.be.deep.equal({
       ...BOOKS[1],
@@ -80,6 +81,5 @@ describe('PATCH /books/:id', () => {
       ],
       id: BOOKS[0].id,
     });
-    expect(body).to.be.deep.equal(updatedBook);
   });
 });

@@ -7,12 +7,20 @@ module.exports.create = async ({ title, date, description, image, authors }) => 
   return transaction(pool, async connection => {
     const bookId = uuidv1();
 
-    await connection.queryAsync(`
-      INSERT INTO books(id, title, date, description, image)
-      VALUES (UUID_TO_BIN('${bookId}'), '${title}', '${date}', '${description}', '${image}');
-    `);
+    try {
+      await connection.queryAsync(`
+        INSERT INTO books(id, title, date, description, image)
+        VALUES (UUID_TO_BIN('${bookId}'), '${title}', '${date}', '${description}', '${image}');
+      `);
+    } catch (err) {
+      if (err.code === 'ER_DUP_ENTRY') {
+        throw new BookTitleAlreadyInUse();
+      }
 
-    if (authors) {
+      throw err;
+    }
+
+    if (authors && authors.length) {
       const booksAuthors = authors
         .map(authorId => { return `(UUID_TO_BIN('${bookId}'), UUID_TO_BIN('${authorId}'))`; })
         .join(',');
@@ -61,27 +69,31 @@ module.exports.update = async ({ id: bookId, title, date, description, image, au
     }
 
     if (authors) {
-      const booksAuthors = authors
-        .map(authorId => { return `(UUID_TO_BIN('${bookId}'), UUID_TO_BIN('${authorId}'))`; })
-        .join(',');
+      await connection.queryAsync(`
+        DELETE FROM books_authors WHERE book_id=UUID_TO_BIN('${bookId}');
+      `);
 
-      try {
-        await connection.queryAsync(`
-          DELETE FROM books_authors WHERE book_id=UUID_TO_BIN('${bookId}');
+      if (authors.length) {
+        const booksAuthors = authors
+          .map(authorId => { return `(UUID_TO_BIN('${bookId}'), UUID_TO_BIN('${authorId}'))`; })
+          .join(',');
 
-          INSERT INTO books_authors(book_id, author_id)
-          VALUES ${booksAuthors};
-        `);
-      } catch (err) {
-        if (['ER_NO_REFERENCED_ROW', 'ER_NO_REFERENCED_ROW_2'].includes(err.code)) {
-          throw new AuthorNotFoundError('Some author from \'authors\' array not found');
+        try {
+          await connection.queryAsync(`
+            INSERT INTO books_authors(book_id, author_id)
+            VALUES ${booksAuthors};
+          `);
+        } catch (err) {
+          if (['ER_NO_REFERENCED_ROW', 'ER_NO_REFERENCED_ROW_2'].includes(err.code)) {
+            throw new AuthorNotFoundError('Some author from \'authors\' array not found');
+          }
+
+          throw err;
         }
-
-        throw err;
       }
     }
 
-    return { id: bookId, title, date, description, image, authors };
+    return { ok: true };
   });
 };
 

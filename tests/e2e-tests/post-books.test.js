@@ -4,7 +4,7 @@ const isUUID = require('is-uuid');
 const uuidv1 = require('uuid/v1');
 const app = require('../../src');
 const pool = require('../../src/db');
-const { cleanup, insertAuthors, getBooksWithAuthors } = require('../utils/helpers');
+const { cleanup, insertBooks, insertAuthors, getBooksWithAuthors } = require('../utils/helpers');
 const { BOOKS, AUTHORS } = require('../utils/assets');
 
 chai.use(chaiHttp);
@@ -25,6 +25,20 @@ describe('POST /books', () => {
     expect(status).to.be.equal(400);
     expect(booksCount).to.be.equal(0);
     expect(body).to.be.deep.equal({ error: 'Some author from \'authors\' array not found' });
+  });
+
+  it('should not create book (book title already in use)', async () => {
+    await insertBooks(BOOKS);
+
+    const { status, body } = await request(app)
+      .post('/books')
+      .send(BOOKS[0]);
+
+    const { booksCount } = (await pool.queryAsync('SELECT COUNT(*) AS booksCount FROM books;'))[0];
+
+    expect(status).to.be.equal(400);
+    expect(booksCount).to.be.equal(BOOKS.length);
+    expect(body).to.be.deep.equal({ error: 'Book title already in use' });
   });
 
   it('should create book', async () => {
