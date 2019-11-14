@@ -69,13 +69,7 @@ $ docker-compose up -d
 
 ## Docs
 
-You can generate documentaion described this API with command:
-
-``` sh
-$ npm run docs
-```
-
-Now open './docs/index.html' file in your browser.
+Docs available [here](https://eliseevnp.github.io/library-api/).
 
 ## License
 
