@@ -12,7 +12,7 @@ module.exports = (tableName, whereObject) => {
       return `(${whereExpressions.join(` ${key} `)})`;
     }
 
-    return `${tableName}.${key} ${currentWhereObject[key].operator} '${currentWhereObject[key].value}'`;
+    return `${tableName}.${key} ${currentWhereObject[key].operator} '${currentWhereObject[key].value.replace(/\'/g, '\\\'')}'`;
   };
 
   return `WHERE ${buildWhereSQLRecursive(whereObject)}`;
