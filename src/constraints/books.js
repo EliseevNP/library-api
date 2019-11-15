@@ -39,6 +39,8 @@ const bookFields = {
   },
 };
 
+const { authors, ...whereConstraints } = bookFields;
+
 const sortInclusion = [
   ...Object.keys(bookFields),
   ...Object.keys(bookFields).map(bookFieldKey => { return `${bookFieldKey} ASC`; }),
@@ -105,7 +107,16 @@ module.exports.getBooks = {
   },
   where: {
     validateWhere: {
-      fieldsConstraints: { ...bookFields, authors: undefined },
+      fieldsConstraints: whereConstraints,
+    },
+    validateExtension: {
+      transform: value => {
+        try {
+          return JSON.parse(value);
+        } catch (err) {
+          return value;
+        }
+      },
     },
   },
 };

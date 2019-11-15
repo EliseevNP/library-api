@@ -90,7 +90,7 @@ const validateWhere = (value, options, key) => {
     const key = keys[0]; // eslint-disable-line no-shadow
 
     if (!knownKeys.includes(key)) {
-      errors.push(`${path} contain unknown key '${key}' (known keys: [${knownKeys.join(',')}])`);
+      errors.push(`${path} contain unknown key '${key}' (known keys: [${knownKeys.join(', ')}])`);
       return;
     }
 
@@ -109,7 +109,10 @@ const validateWhere = (value, options, key) => {
     } else {
       const leafConstraints = {
         [key]: { type: 'object' },
-        [`${key}.value`]: options.fieldsConstraints[key],
+        [`${key}.value`]: {
+          ...options.fieldsConstraints[key],
+          presence: true,
+        },
         [`${key}.operator`]: {
           presence: true,
           type: 'string',

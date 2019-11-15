@@ -82,29 +82,30 @@
  *
  * @apiExample {js} Пример запроса с помощью axios:
  * const axios = require('axios');
- * const qs = require('qs'); // Use 'qs' npm-package to stringify object with query parameters
- *
- * const { data } = await axios.get('http://localhost:3000/books?' + qs.stringify({
- *   offset: 0,
- *   limit: 10,
- *   order: ['title DESC'],
- *   where: { // WHERE title = 'book_3' OR description = 'book_description_2'
- *     OR: [
- *       {
- *         title: {
- *           operator: '=',
- *           value: 'book_3',
+ * 
+ * const { data } = await axios.get('http://localhost:3000/books', {
+ *   params: {
+ *     offset: 0,
+ *     limit: 10,
+ *     order: ['title DESC'],
+ *     where: JSON.stringify({ // WHERE title = 'book_3' OR description = 'book_description_2'
+ *       OR: [
+ *         {
+ *           title: {
+ *             operator: '=',
+ *             value: 'book_3',
+ *           },
  *         },
- *       },
- *       {
- *         description: {
- *           operator: '=',
- *           value: 'book_description_2',
+ *         {
+ *           description: {
+ *             operator: '=',
+ *             value: 'book_description_2',
+ *           },
  *         },
- *       },
- *     ],
- *   }
- * }));
+ *       ],
+ *     }),
+ *   },
+ * });
  *
  * console.log(data); // will be printed an array of objects, where each object represents a book
  *

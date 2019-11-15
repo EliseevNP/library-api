@@ -137,7 +137,7 @@ module.exports.get = async ({ offset, limit, sort, where }) => {
   `;
 
   if (where) {
-    selectQuery += `${buildWhereSQL('books', where)}\n`;
+    selectQuery += `${buildWhereSQL(where)}\n`;
   }
 
   selectQuery += 'GROUP BY books.id\n';

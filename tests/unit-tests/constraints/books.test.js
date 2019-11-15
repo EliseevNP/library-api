@@ -260,7 +260,7 @@ describe('books constraints', () => {
       };
 
       const expectedErrors = {
-        where: ['where contain unknown key \'unknownKey\' (known keys: [AND,OR,title,date,description,image,authors])'],
+        where: ['where contain unknown key \'unknownKey\' (known keys: [AND, OR, title, date, description, image])'],
       };
 
       expect(validateExtension(values, books.getBooks)).to.be.deep.equal(expectedErrors);

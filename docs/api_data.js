@@ -83,7 +83,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Пример запроса с помощью axios:",
-        "content": "const axios = require('axios');\nconst qs = require('qs'); // Use 'qs' npm-package to stringify object with query parameters\n\nconst { data } = await axios.get('http://localhost:3000/books?' + qs.stringify({\n  offset: 0,\n  limit: 10,\n  order: ['title DESC'],\n  where: { // WHERE title = 'book_3' OR description = 'book_description_2'\n    OR: [\n      {\n        title: {\n          operator: '=',\n          value: 'book_3',\n        },\n      },\n      {\n        description: {\n          operator: '=',\n          value: 'book_description_2',\n        },\n      },\n    ],\n  }\n}));\n\nconsole.log(data); // will be printed an array of objects, where each object represents a book",
+        "content": "const axios = require('axios');\n\nconst { data } = await axios.get('http://localhost:3000/books', {\n  params: {\n    offset: 0,\n    limit: 10,\n    order: ['title DESC'],\n    where: JSON.stringify({ // WHERE title = 'book_3' OR description = 'book_description_2'\n      OR: [\n        {\n          title: {\n            operator: '=',\n            value: 'book_3',\n          },\n        },\n        {\n          description: {\n            operator: '=',\n            value: 'book_description_2',\n          },\n        },\n      ],\n    }),\n  },\n});\n\nconsole.log(data); // will be printed an array of objects, where each object represents a book",
         "type": "js"
       }
     ],
@@ -144,11 +144,10 @@ define({ "api": [
           },
           {
             "group": "Параметры (источник: querystring)",
-            "type": "object",
-            "size": "1",
+            "type": "string",
             "optional": true,
             "field": "where",
-            "description": "<p>Условия фильтрации книг (объект должен содержать только один ключ)</p>"
+            "description": "<p>Условия фильтрации книг (параметр должен являться json-строкой, содержащей один из ключей, представленных ниже)</p>"
           },
           {
             "group": "Параметры (источник: querystring)",

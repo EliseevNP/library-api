@@ -1,6 +1,6 @@
 const { WHERE_OPERATORS } = require('../constants');
 
-module.exports = (tableName, whereObject) => {
+module.exports = whereObject => {
   const buildWhereSQLRecursive = currentWhereObject => {
     const key = Object.keys(currentWhereObject)[0];
 
@@ -12,7 +12,7 @@ module.exports = (tableName, whereObject) => {
       return `(${whereExpressions.join(` ${key} `)})`;
     }
 
-    return `${tableName}.${key} ${currentWhereObject[key].operator} '${currentWhereObject[key].value.replace(/'/g, '\\\'')}'`;
+    return `${key} ${currentWhereObject[key].operator} '${currentWhereObject[key].value.replace(/'/g, '\\\'')}'`;
   };
 
   return `WHERE ${buildWhereSQLRecursive(whereObject)}`;
