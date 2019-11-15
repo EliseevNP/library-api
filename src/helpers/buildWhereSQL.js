@@ -5,8 +5,11 @@ module.exports = (tableName, whereObject) => {
     const key = Object.keys(currentWhereObject)[0];
 
     if (WHERE_OPERATORS.LOGICALS.includes(key)) {
-      const temp = currentWhereObject[key].map(item => { return buildWhereSQLRecursive(item); });
-      return `(${temp.join(` ${key} `)})`;
+      const whereExpressions = currentWhereObject[key].map(item => {
+        return buildWhereSQLRecursive(item);
+      });
+
+      return `(${whereExpressions.join(` ${key} `)})`;
     }
 
     return `${tableName}.${key} ${currentWhereObject[key].operator} '${currentWhereObject[key].value}'`;
