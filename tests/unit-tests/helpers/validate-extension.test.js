@@ -11,13 +11,19 @@ describe('validate extension', () => {
 
     const constraints = {
       author: {
-        default: 'Nikita Eliseev',
+        validateExtension: {
+          default: 'Nikita Eliseev',
+        },
       },
       'info.birthday': {
-        default: '19.03.97',
+        validateExtension: {
+          default: '19.03.97',
+        },
       },
       'not.specified.param': {
-        default: 'this must not present in values after validation',
+        validateExtension: {
+          default: 'this must not present in values after validation',
+        },
       },
     };
 
@@ -40,24 +46,24 @@ describe('validate extension', () => {
 
     const constraints = {
       author: {
-        transform: () => {
-          return (value => {
+        validateExtension: {
+          transform: value => {
             return `${value} Eliseev`;
-          });
+          },
         },
       },
       'info.birthday': {
-        transform: () => {
-          return (value => {
+        validateExtension: {
+          transform: value => {
             return `${value}.97`;
-          });
+          },
         },
       },
       'not.specified.param': {
-        transform: () => {
-          return (() => {
-            return 'this must not present in values after validation';
-          });
+        validateExtension: {
+          transform: value => {
+            return `value '${value}' must not present in values after validation`;
+          },
         },
       },
     };

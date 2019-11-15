@@ -13,21 +13,22 @@ const validate = require('validate.js');
  * 3) Transform values before validating
  */
 
-validate.validators.default = () => {};
-validate.validators.transform = () => {};
+validate.validators.validateExtension = () => {};
 
 const handleBeforeValidate = (object, key, constraints) => {
-  const value = object[key];
-  const { transform, default: defaultValue } = constraints;
+  if (constraints.validateExtension) {
+    const value = object[key];
+    const { transform, default: defaultValue } = constraints.validateExtension;
 
-  if (value === undefined && defaultValue !== undefined) {
-    // Set default value
-    object[key] = defaultValue;
-  }
+    if (value === undefined && defaultValue !== undefined) {
+      // Set default value
+      object[key] = defaultValue;
+    }
 
-  if (value !== undefined && transform) {
-    // Transform
-    object[key] = transform()(object[key]);
+    if (value !== undefined && transform) {
+      // Transform
+      object[key] = transform(object[key]);
+    }
   }
 };
 

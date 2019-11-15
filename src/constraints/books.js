@@ -68,7 +68,9 @@ module.exports.getBooks = {
       onlyInteger: true,
       greaterThanOrEqualTo: 0,
     },
-    default: 0,
+    validateExtension: {
+      default: 0,
+    },
   },
   limit: {
     numericality: {
@@ -76,7 +78,9 @@ module.exports.getBooks = {
       greaterThan: 0,
       lessThanOrEqualTo: 100,
     },
-    default: 20,
+    validateExtension: {
+      default: 20,
+    },
   },
   sort: {
     type: 'array',
@@ -91,12 +95,12 @@ module.exports.getBooks = {
     duplicates: {
       allow: false,
     },
-    transform: () => {
-      return (value => {
+    validateExtension: {
+      transform: value => {
         return validate.isString(value)
           ? [value]
           : value;
-      });
+      },
     },
   },
   where: {
