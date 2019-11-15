@@ -84,7 +84,7 @@
  * const axios = require('axios');
  * const qs = require('qs'); // Use 'qs' npm-package to stringify object with query parameters
  *
- * const { data } = await axios.get(`http://localhost:3000/books?${qs.stringify({
+ * const { data } = await axios.get('http://localhost:3000/books?' + qs.stringify({
  *   offset: 0,
  *   limit: 10,
  *   order: ['title DESC'],
@@ -104,7 +104,7 @@
  *       },
  *     ],
  *   }
- * })}`);
+ * }));
  *
  * console.log(data); // will be printed an array of objects, where each object represents a book
  *
