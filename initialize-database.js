@@ -7,7 +7,7 @@ const uuidv1 = require('uuid/v1');
 const shuffle = require('shuffle-array');
 const pool = require('./src/db');
 
-const BOOKS_COUNT = process.env.BOOKS_COUNT || 20000;
+const BOOKS_COUNT = process.env.BOOKS_COUNT || 100000;
 const AUTHORS_COUNT = process.env.AUTHORS_COUNT || 500;
 const MAX_COAUTHORS_COUNT = 3;
 const INSERTION_STEP = 50000;
