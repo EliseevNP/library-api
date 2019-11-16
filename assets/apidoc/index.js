@@ -79,6 +79,15 @@
  * @apiUse BookWhereImageParam
  * @apiUse BookWhereImageOperatorParam
  * @apiUse BookWhereImageValueParam
+ * @apiUse BookWhereNameParam
+ * @apiUse BookWhereNameOperatorParam
+ * @apiUse BookWhereNameValueParam
+ * @apiUse BookWhereSecondNameParam
+ * @apiUse BookWhereSecondNameOperatorParam
+ * @apiUse BookWhereSecondNameValueParam
+ * @apiUse BookWherePatronymicParam
+ * @apiUse BookWherePatronymicOperatorParam
+ * @apiUse BookWherePatronymicValueParam
  *
  * @apiExample {js} Пример запроса с помощью axios:
  * const axios = require('axios');
@@ -88,19 +97,39 @@
  *     offset: 0,
  *     limit: 10,
  *     order: ['title DESC'],
- *     where: JSON.stringify({ // WHERE title = 'book_3' OR description = 'book_description_2'
+ *     // WHERE
+ *     //   title = 'book_2' OR
+ *     //   description = 'book_description_3' OR
+ *     //   (name >= 'author_name_4' AND name <= 'author_name_5');
+ *     where: JSON.stringify({
  *       OR: [
  *         {
  *           title: {
  *             operator: '=',
- *             value: 'book_3',
+ *             value: 'book_2',
  *           },
  *         },
  *         {
  *           description: {
  *             operator: '=',
- *             value: 'book_description_2',
+ *             value: 'book_description_3',
  *           },
+ *         },
+ *         {
+ *           AND: [
+ *             {
+ *               name: {
+ *                 operator: '>=',
+ *                 value: 'author_name_4',
+ *               },
+ *             },
+ *             {
+ *               name: {
+ *                 operator: '<=',
+ *                 value: 'author_name_5',
+ *               },
+ *             },
+ *           ],
  *         },
  *       ],
  *     }),

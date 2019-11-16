@@ -60,7 +60,7 @@
 
 /**
 * @apiDefine BookWhereTitleParam
-* @apiParam (Параметры (источник: querystring)) {object} [where.title] Объект, содержащий информацию для сравнения с полем title
+* @apiParam (Параметры (источник: querystring)) {object} [where.title] Объект, содержащий информацию для сравнения с названием книги
 */
 
 /**
@@ -75,7 +75,7 @@
 
 /**
 * @apiDefine BookWhereDateParam
-* @apiParam (Параметры (источник: querystring)) {object} [where.date] Объект, содержащий информацию для сравнения с полем date
+* @apiParam (Параметры (источник: querystring)) {object} [where.date] Объект, содержащий информацию для сравнения с датой публикации книги
 */
 
 /**
@@ -90,7 +90,7 @@
 
 /**
 * @apiDefine BookWhereDescriptionParam
-* @apiParam (Параметры (источник: querystring)) {object} [where.description] Объект, содержащий информацию для сравнения с полем description
+* @apiParam (Параметры (источник: querystring)) {object} [where.description] Объект, содержащий информацию для сравнения с описанием книги
 */
 
 /**
@@ -105,15 +105,60 @@
 
 /**
 * @apiDefine BookWhereImageParam
-* @apiParam (Параметры (источник: querystring)) {object} [where.image] Объект, содержащий информацию для сравнения с полем image
+* @apiParam (Параметры (источник: querystring)) {object} [where.image] Объект, содержащий информацию для сравнения со ссылкой на картинку обложки книги
 */
 
 /**
 * @apiDefine BookWhereImageOperatorParam
-* @apiParam (Параметры (источник: querystring)) {string='=','!=','>','>=','<','<=','!<','!>','<>'} [where.timage.operator] Оператор сравнения
+* @apiParam (Параметры (источник: querystring)) {string='=','!=','>','>=','<','<=','!<','!>','<>'} [where.image.operator] Оператор сравнения
 */
 
 /**
 * @apiDefine BookWhereImageValueParam
 * @apiParam (Параметры (источник: querystring)) {string{..255}} [where.image.value] Значение для сравнения (URL)
+*/
+
+/**
+* @apiDefine BookWhereNameParam
+* @apiParam (Параметры (источник: querystring)) {object} [where.name] Объект, содержащий информацию для сравнения с именем автора книги
+*/
+
+/**
+* @apiDefine BookWhereNameOperatorParam
+* @apiParam (Параметры (источник: querystring)) {string='=','!=','>','>=','<','<=','!<','!>','<>'} [where.name.operator] Оператор сравнения
+*/
+
+/**
+* @apiDefine BookWhereNameValueParam
+* @apiParam (Параметры (источник: querystring)) {string{..255}} [where.name.value] Значение для сравнения
+*/
+
+/**
+* @apiDefine BookWhereSecondNameParam
+* @apiParam (Параметры (источник: querystring)) {object} [where.second_name] Объект, содержащий информацию для сравнения с фамилией автора книги
+*/
+
+/**
+* @apiDefine BookWhereSecondNameOperatorParam
+* @apiParam (Параметры (источник: querystring)) {string='=','!=','>','>=','<','<=','!<','!>','<>'} [where.second_name.operator] Оператор сравнения
+*/
+
+/**
+* @apiDefine BookWhereSecondNameValueParam
+* @apiParam (Параметры (источник: querystring)) {string{..255}} [where.second_name.value] Значение для сравнения
+*/
+
+/**
+* @apiDefine BookWherePatronymicParam
+* @apiParam (Параметры (источник: querystring)) {object} [where.patronymic] Объект, содержащий информацию для сравнения с отчеством автора книги
+*/
+
+/**
+* @apiDefine BookWherePatronymicOperatorParam
+* @apiParam (Параметры (источник: querystring)) {string='=','!=','>','>=','<','<=','!<','!>','<>'} [where.patronymic.operator] Оператор сравнения
+*/
+
+/**
+* @apiDefine BookWherePatronymicValueParam
+* @apiParam (Параметры (источник: querystring)) {string{..255}} [where.patronymic.value] Значение для сравнения
 */

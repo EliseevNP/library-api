@@ -83,7 +83,7 @@
     "examples": [
       {
         "title": "Пример запроса с помощью axios:",
-        "content": "const axios = require('axios');\n\nconst { data } = await axios.get('http://localhost:3000/books', {\n  params: {\n    offset: 0,\n    limit: 10,\n    order: ['title DESC'],\n    where: JSON.stringify({ // WHERE title = 'book_3' OR description = 'book_description_2'\n      OR: [\n        {\n          title: {\n            operator: '=',\n            value: 'book_3',\n          },\n        },\n        {\n          description: {\n            operator: '=',\n            value: 'book_description_2',\n          },\n        },\n      ],\n    }),\n  },\n});\n\nconsole.log(data); // will be printed an array of objects, where each object represents a book",
+        "content": "const axios = require('axios');\n\nconst { data } = await axios.get('http://localhost:3000/books', {\n  params: {\n    offset: 0,\n    limit: 10,\n    order: ['title DESC'],\n    // WHERE\n    //   title = 'book_2' OR\n    //   description = 'book_description_3' OR\n    //   (name >= 'author_name_4' AND name <= 'author_name_5');\n    where: JSON.stringify({\n      OR: [\n        {\n          title: {\n            operator: '=',\n            value: 'book_2',\n          },\n        },\n        {\n          description: {\n            operator: '=',\n            value: 'book_description_3',\n          },\n        },\n        {\n          AND: [\n            {\n              name: {\n                operator: '>=',\n                value: 'author_name_4',\n              },\n            },\n            {\n              name: {\n                operator: '<=',\n                value: 'author_name_5',\n              },\n            },\n          ],\n        },\n      ],\n    }),\n  },\n});\n\nconsole.log(data); // will be printed an array of objects, where each object represents a book",
         "type": "js"
       }
     ],
@@ -170,7 +170,7 @@
             "type": "object",
             "optional": true,
             "field": "where.title",
-            "description": "<p>Объект, содержащий информацию для сравнения с полем title</p>"
+            "description": "<p>Объект, содержащий информацию для сравнения с названием книги</p>"
           },
           {
             "group": "Параметры (источник: querystring)",
@@ -203,7 +203,7 @@
             "type": "object",
             "optional": true,
             "field": "where.date",
-            "description": "<p>Объект, содержащий информацию для сравнения с полем date</p>"
+            "description": "<p>Объект, содержащий информацию для сравнения с датой публикации книги</p>"
           },
           {
             "group": "Параметры (источник: querystring)",
@@ -235,7 +235,7 @@
             "type": "object",
             "optional": true,
             "field": "where.description",
-            "description": "<p>Объект, содержащий информацию для сравнения с полем description</p>"
+            "description": "<p>Объект, содержащий информацию для сравнения с описанием книги</p>"
           },
           {
             "group": "Параметры (источник: querystring)",
@@ -268,7 +268,7 @@
             "type": "object",
             "optional": true,
             "field": "where.image",
-            "description": "<p>Объект, содержащий информацию для сравнения с полем image</p>"
+            "description": "<p>Объект, содержащий информацию для сравнения со ссылкой на картинку обложки книги</p>"
           },
           {
             "group": "Параметры (источник: querystring)",
@@ -285,7 +285,7 @@
               "'<>'"
             ],
             "optional": true,
-            "field": "where.timage.operator",
+            "field": "where.image.operator",
             "description": "<p>Оператор сравнения</p>"
           },
           {
@@ -295,6 +295,105 @@
             "optional": true,
             "field": "where.image.value",
             "description": "<p>Значение для сравнения (URL)</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.name",
+            "description": "<p>Объект, содержащий информацию для сравнения с именем автора книги</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.name.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "size": "..255",
+            "optional": true,
+            "field": "where.name.value",
+            "description": "<p>Значение для сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.second_name",
+            "description": "<p>Объект, содержащий информацию для сравнения с фамилией автора книги</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.second_name.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "size": "..255",
+            "optional": true,
+            "field": "where.second_name.value",
+            "description": "<p>Значение для сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "object",
+            "optional": true,
+            "field": "where.patronymic",
+            "description": "<p>Объект, содержащий информацию для сравнения с отчеством автора книги</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "allowedValues": [
+              "'='",
+              "'!='",
+              "'>'",
+              "'>='",
+              "'<'",
+              "'<='",
+              "'!<'",
+              "'!>'",
+              "'<>'"
+            ],
+            "optional": true,
+            "field": "where.patronymic.operator",
+            "description": "<p>Оператор сравнения</p>"
+          },
+          {
+            "group": "Параметры (источник: querystring)",
+            "type": "string",
+            "size": "..255",
+            "optional": true,
+            "field": "where.patronymic.value",
+            "description": "<p>Значение для сравнения</p>"
           }
         ]
       }
