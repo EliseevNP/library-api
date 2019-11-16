@@ -1,5 +1,6 @@
 const isUUID = require('is-uuid');
 const validate = require('validate.js');
+const { authorFields } = require('./authors');
 
 const bookFields = {
   title: {
@@ -39,13 +40,23 @@ const bookFields = {
   },
 };
 
-const { authors, ...whereConstraints } = bookFields;
+const whereConstraints = {
+  title: bookFields.title,
+  date: bookFields.date,
+  description: bookFields.description,
+  image: bookFields.image,
+  name: authorFields.name,
+  second_name: authorFields.second_name,
+  patronymic: authorFields.patronymic,
+};
 
 const sortInclusion = [
   ...Object.keys(bookFields),
   ...Object.keys(bookFields).map(bookFieldKey => { return `${bookFieldKey} ASC`; }),
   ...Object.keys(bookFields).map(bookFieldKey => { return `${bookFieldKey} DESC`; }),
 ];
+
+module.exports.bookFields = bookFields;
 
 module.exports.createBooks = {
   ...bookFields,

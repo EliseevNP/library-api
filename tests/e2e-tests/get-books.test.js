@@ -28,31 +28,55 @@ describe('GET /books', () => {
       .get('/books')
       .query({
         offset: 0,
-        limit: 3,
+        limit: 5,
         sort: ['title DESC'],
-        where: JSON.stringify({ // WHERE title = 'book_3' OR description = 'book_description_2'
+        // WHERE
+        //   title = 'book_2' OR
+        //   description = 'book_description_3' OR
+        //   (name >= 'author_name_4' AND name <= 'author_name_5');
+        where: JSON.stringify({
           OR: [
             {
               title: {
                 operator: '=',
-                value: 'book_3',
-                test: {
-                  test2: 'asdf',
-                },
+                value: 'book_2',
               },
             },
             {
               description: {
                 operator: '=',
-                value: 'book_description_2',
-                test: 'asdf',
+                value: 'book_description_3',
               },
+            },
+            {
+              AND: [
+                {
+                  name: {
+                    operator: '>=',
+                    value: 'author_name_4',
+                  },
+                },
+                {
+                  name: {
+                    operator: '<=',
+                    value: 'author_name_5',
+                  },
+                },
+              ],
             },
           ],
         }),
       });
 
     const expectedBooks = [
+      {
+        ...BOOKS[3],
+        authors: [
+          {
+            ...AUTHORS[4],
+          },
+        ],
+      },
       {
         ...BOOKS[2],
         authors: [

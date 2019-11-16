@@ -1,6 +1,7 @@
 const validate = require('validate.js');
 const moment = require('moment');
 const books = require('./books');
+const authors = require('./authors');
 const { CUSTOM_VALIDATORS } = require('../helpers');
 
 validate.extend(validate.validators.datetime, {
@@ -18,5 +19,6 @@ validate.validators.duplicates = CUSTOM_VALIDATORS.duplicates;
 validate.validators.validateWhere = CUSTOM_VALIDATORS.validateWhere;
 
 module.exports = {
+  authors,
   books,
 };
